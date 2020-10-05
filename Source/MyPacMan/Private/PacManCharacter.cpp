@@ -103,6 +103,9 @@ void APacManCharacter::OnCollision(UPrimitiveComponent* HitComp, AActor* OtherAc
 	{
 		if (OtherActor->IsA(ACollectables::StaticClass()))
 		{
+			ACollectables* collectable = Cast<ACollectables>(OtherActor);
+			if (collectable->bIsSupperCollectable)
+				GameMode->SetEnemyVulnerable();
 			OtherActor->Destroy();
 			if (--CollectablesToEat == 0)
 				GameMode->SetCurrentState(EGameState::EWin);

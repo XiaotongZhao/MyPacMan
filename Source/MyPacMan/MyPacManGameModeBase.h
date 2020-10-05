@@ -4,10 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
+#include "Public/Enemy.h"
 #include "MyPacManGameModeBase.generated.h"
 
 /**
- * 
+ *
  */
 enum class EGameState : short
 {
@@ -28,9 +29,11 @@ public:
 	virtual void BeginPlay() override;
 	EGameState GetCurrentState() const;
 	void SetCurrentState(EGameState value);
+	void SetEnemyVulnerable();
 
 private:
 	EGameState currentState;
+	TArray<class AEnemy*> Enemys;
 };
 
 FORCEINLINE EGameState AMyPacManGameModeBase::GetCurrentState() const
