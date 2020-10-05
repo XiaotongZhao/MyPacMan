@@ -37,10 +37,11 @@ public:
 
 	UFUNCTION()
 	void OnCollision(class UPrimitiveComponent* HitComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int OtherBodyIndex, bool bFrowSweep, const FHitResult& SweepResult);
+
+	int CollectablesToEat;
+	int Lives;
 private:
 	FVector CurrentVelocity;
 	FVector StartPoint;
 	AMyPacManGameModeBase* GameMode;
-	int CollectablesToEat;
-	int Lives;
 };

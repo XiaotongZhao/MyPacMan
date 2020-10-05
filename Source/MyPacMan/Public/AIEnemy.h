@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "AIController.h"
 #include "Enemy.h"
+#include "MyPacMan/MyPacManGameModeBase.h"
 #include "AIEnemy.generated.h"
 
 /**
@@ -26,4 +27,5 @@ private:
 	class AEnemy* Bot;
 	FVector HomeLocation;
 	FTimerHandle DeadTime;
+	AMyPacManGameModeBase* GameMode;
 };

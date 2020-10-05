@@ -52,14 +52,20 @@ void APacManCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 void APacManCharacter::MoveXAxis(float AxisValue)
 {
-	CurrentVelocity.X = AxisValue;
-	AddMovementInput(CurrentVelocity);
+	if (GameMode->GetCurrentState() == EGameState::EPlaying)
+	{
+		CurrentVelocity.X = AxisValue;
+		AddMovementInput(CurrentVelocity);
+	}
 }
 
 void APacManCharacter::MoveYAxis(float AxisValue)
 {
-	CurrentVelocity.Y = AxisValue;
-	AddMovementInput(CurrentVelocity);
+	if (GameMode->GetCurrentState() == EGameState::EPlaying)
+	{
+		CurrentVelocity.Y = AxisValue;
+		AddMovementInput(CurrentVelocity);
+	}
 }
 
 void APacManCharacter::ReStart()
@@ -77,9 +83,9 @@ void APacManCharacter::Pause()
 {
 	if (GameMode->GetCurrentState() == EGameState::EPlaying)
 	{
-		GameMode->SetCurrentState(EGameState::Epause);
+		GameMode->SetCurrentState(EGameState::EPause);
 	}
-	else if (GameMode->GetCurrentState() == EGameState::Epause)
+	else if (GameMode->GetCurrentState() == EGameState::EPause)
 	{
 		GameMode->SetCurrentState(EGameState::EPlaying);
 	}
@@ -89,10 +95,12 @@ void APacManCharacter::Killed()
 {
 	if (--Lives == 0)
 	{
+		UE_LOG(LogTemp, Warning, TEXT("Your life is %d, Game Over"), Lives);
 		GameMode->SetCurrentState(EGameState::EGameOver);
 	}
 	else
 	{
+		UE_LOG(LogTemp, Warning, TEXT("Your life is %d"), Lives);
 		SetActorLocation(StartPoint);
 	}
 }

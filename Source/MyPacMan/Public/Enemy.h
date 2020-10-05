@@ -32,7 +32,7 @@ public:
 	void SetVulnerable();
 	void SetInVulnerable();
 
-	void SetMove(bool MoveIt);
+	void SetMove(bool bMoveIt);
 	void Killed();
 	void ReArm();
 

@@ -5,6 +5,7 @@
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "PacManCharacter.h"
+#include "AIEnemy.h"
 
 // Sets default values
 AEnemy::AEnemy()
@@ -22,7 +23,8 @@ AEnemy::AEnemy()
 	GetCapsuleComponent()->SetCapsuleRadius(40.0f);
 	GetCapsuleComponent()->SetCapsuleHalfHeight(50.0f);
 	static ConstructorHelpers::FObjectFinder<UMaterial>VulnerableMat(TEXT("'/Game/Materials/M_Enemy_Vulnerable'"));
-
+	SetActorEnableCollision(true);
+	AIControllerClass = AAIEnemy::StaticClass();
 }
 
 // Called when the game starts or when spawned
@@ -30,6 +32,8 @@ void AEnemy::BeginPlay()
 {
 	Super::BeginPlay();
 	DefaultMaterial = EnemyBody->GetMaterial(0);
+	GetCapsuleComponent()->OnComponentBeginOverlap.AddDynamic(this, &AEnemy::OnCollision);
+	GetCharacterMovement()->MaxWalkSpeed = 150.0f;
 }
 
 // Called every frame
@@ -64,8 +68,14 @@ void AEnemy::SetInVulnerable()
 	GetCharacterMovement()->MaxWalkSpeed = 150.0f;
 }
 
-void AEnemy::SetMove(bool MoveIt)
+void AEnemy::SetMove(bool bMoveIt)
 {
+	AAIEnemy* AI = Cast<AAIEnemy>(GetController());
+
+	if (bMoveIt)
+		AI->SearchNewPoint();
+	else
+		AI->StopMove();
 }
 
 void AEnemy::Killed()
@@ -74,6 +84,8 @@ void AEnemy::Killed()
 		return;
 	bIsDead = true;
 	GetCharacterMovement()->MaxWalkSpeed = 300.0f;
+	AAIEnemy* AI = Cast<AAIEnemy>(GetController());
+	AI->GoHome();
 }
 
 void AEnemy::ReArm()
@@ -82,6 +94,7 @@ void AEnemy::ReArm()
 	GetCharacterMovement()->MaxWalkSpeed = 150.0f;
 	if (bIsVulnerable)
 		SetInVulnerable();
+	SetMove(true);
 }
 
 void AEnemy::OnCollision(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int OtherBodyIndex, bool bFrowSweep, const FHitResult& SweepResult)

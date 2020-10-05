@@ -14,7 +14,7 @@ enum class EGameState : short
 {
 	EMenu,
 	EPlaying,
-	Epause,
+	EPause,
 	EWin,
 	EGameOver
 };

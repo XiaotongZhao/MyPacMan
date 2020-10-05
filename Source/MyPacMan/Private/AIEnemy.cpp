@@ -3,18 +3,20 @@
 
 #include "AIEnemy.h"
 #include "NavigationSystem.h"
+#include "Kismet/GameplayStatics.h"
 
 void AAIEnemy::OnPossess(class APawn* InPawn)
 {
 	Super::OnPossess(InPawn);
 	Bot = Cast<AEnemy>(InPawn);
 	HomeLocation = Bot->GetActorLocation();
+	GameMode = Cast<AMyPacManGameModeBase>(UGameplayStatics::GetGameMode(this));
 	SearchNewPoint();
 }
 
 void AAIEnemy::OnMoveCompleted(FAIRequestID RequestId, const FPathFollowingResult& Result)
 {
-	if (!Bot->bIsDead)
+	if (!Bot->bIsDead && GameMode->GetCurrentState() != EGameState::EPause)
 		SearchNewPoint();
 }
 
@@ -24,7 +26,7 @@ void AAIEnemy::SearchNewPoint()
 
 	if (NavMesh)
 	{
-		const float SearchRadius = 1000.0f;
+		const float SearchRadius = 10000.0f;
 		FNavLocation RandomPt;
 		const bool bFound = NavMesh->GetRandomReachablePointInRadius(Bot->GetActorLocation(), SearchRadius, RandomPt);
 
@@ -47,5 +49,5 @@ void AAIEnemy::ReArm()
 
 void AAIEnemy::StopMove()
 {
-	StopMovement();
+	MoveToLocation(Bot->GetActorLocation());
 }
