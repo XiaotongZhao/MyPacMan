@@ -42,6 +42,7 @@ public:
 	int Lives;
 private:
 	FVector CurrentVelocity;
+	FRotator CurrentRotaor;
 	FVector StartPoint;
 	AMyPacManGameModeBase* GameMode;
 };
