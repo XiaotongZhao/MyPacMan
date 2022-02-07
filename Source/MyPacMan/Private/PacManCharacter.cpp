@@ -55,10 +55,10 @@ void APacManCharacter::MoveXAxis(float AxisValue)
 	if (GameMode->GetCurrentState() == EGameState::EPlaying && Controller != nullptr && AxisValue != 0.0f)
 	{
 		CurrentVelocity.X = AxisValue;
-		CurrentRotaor = Controller->GetControlRotation();
-		CurrentRotaor.Yaw = AxisValue > 0 ? 0.f : 180.f;
+		CurrentRotation = Controller->GetControlRotation();
+		CurrentRotation.Yaw = AxisValue > 0 ? 0.f : 180.f;
 		AddMovementInput(CurrentVelocity);
-		Controller->SetControlRotation(CurrentRotaor);
+		Controller->SetControlRotation(CurrentRotation);
 	}
 }
 
@@ -67,10 +67,10 @@ void APacManCharacter::MoveYAxis(float AxisValue)
 	if (GameMode->GetCurrentState() == EGameState::EPlaying && Controller != nullptr && AxisValue != 0.0f)
 	{
 		CurrentVelocity.Y = AxisValue;
-		CurrentRotaor = Controller->GetControlRotation();
-		CurrentRotaor.Yaw = AxisValue > 0 ? 90.f : 270.f;
+		CurrentRotation = Controller->GetControlRotation();
+		CurrentRotation.Yaw = AxisValue > 0 ? 90.f : 270.f;
 		AddMovementInput(CurrentVelocity);
-		Controller->SetControlRotation(CurrentRotaor);
+		Controller->SetControlRotation(CurrentRotation);
 
 	}
 }
