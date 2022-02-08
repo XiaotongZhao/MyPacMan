@@ -12,14 +12,8 @@ AEnemy::AEnemy()
 {
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-	EnemyBody = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Body"));
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> CylinderObj(TEXT("'/Game/StarterContent/Shapes/Shape_Cylinder'"));
-	if (CylinderObj.Succeeded())
-		EnemyBody->SetStaticMesh(CylinderObj.Object);
 
-	EnemyBody->SetRelativeScale3D(FVector(0.7f, 0.7f, 1.0f));
-	EnemyBody->SetRelativeLocation(FVector(0, 0, -50));
-	EnemyBody->SetupAttachment(RootComponent);
 	GetCapsuleComponent()->SetCapsuleRadius(40.0f);
 	GetCapsuleComponent()->SetCapsuleHalfHeight(50.0f);
 	static ConstructorHelpers::FObjectFinder<UMaterial>VulnerableMat(TEXT("'/Game/Materials/M_Enemy_Vulnerable'"));
@@ -31,7 +25,6 @@ AEnemy::AEnemy()
 void AEnemy::BeginPlay()
 {
 	Super::BeginPlay();
-	DefaultMaterial = EnemyBody->GetMaterial(0);
 	GetCapsuleComponent()->OnComponentBeginOverlap.AddDynamic(this, &AEnemy::OnCollision);
 	GetCharacterMovement()->MaxWalkSpeed = 150.0f;
 }
@@ -56,7 +49,6 @@ void AEnemy::SetVulnerable()
 	if (bIsVulnerable)
 		return;
 	bIsVulnerable = true;
-	EnemyBody->SetMaterial(0, VulnerableMaterial);
 	GetCharacterMovement()->MaxWalkSpeed = 50.0f;
 }
 
@@ -64,7 +56,6 @@ void AEnemy::SetInVulnerable()
 {
 	GetWorldTimerManager().ClearTimer(TimeVulnerable);
 	bIsVulnerable = false;
-	EnemyBody->SetMaterial(0, DefaultMaterial);
 	GetCharacterMovement()->MaxWalkSpeed = 150.0f;
 }
 

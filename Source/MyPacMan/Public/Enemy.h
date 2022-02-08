@@ -26,8 +26,6 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	UPROPERTY(VisibleAnywhere, Category = Body)
-	UStaticMeshComponent* EnemyBody;
 
 	void SetVulnerable();
 	void SetInVulnerable();
