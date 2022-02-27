@@ -39,9 +39,16 @@ public:
 
 	bool bIsDead;
 
+	UPROPERTY(EditAnywhere)
+	UMaterialInterface* Material;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="EnemyParams")
+	bool bIsVulnerable;
+
 private:
 	class UMaterialInterface* DefaultMaterial;
 	class UMaterialInterface* VulnerableMaterial;
+	USkeletalMeshComponent* EnemyMesh;
 	FTimerHandle TimeVulnerable;
-	bool bIsVulnerable;
+	int32 index;
 };

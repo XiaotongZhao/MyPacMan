@@ -17,14 +17,22 @@ AEnemy::AEnemy()
 	GetCapsuleComponent()->SetCapsuleRadius(40.0f);
 	GetCapsuleComponent()->SetCapsuleHalfHeight(50.0f);
 	static ConstructorHelpers::FObjectFinder<UMaterial>VulnerableMat(TEXT("'/Game/Materials/M_Enemy_Vulnerable'"));
+	
+	
+	VulnerableMaterial = VulnerableMat.Object;
+	EnemyMesh = this->GetMesh();
+
 	SetActorEnableCollision(true);
 	AIControllerClass = AAIEnemy::StaticClass();
+
+
 }
 
 // Called when the game starts or when spawned
 void AEnemy::BeginPlay()
 {
 	Super::BeginPlay();
+	DefaultMaterial = EnemyMesh->GetMaterial(1);
 	GetCapsuleComponent()->OnComponentBeginOverlap.AddDynamic(this, &AEnemy::OnCollision);
 	GetCharacterMovement()->MaxWalkSpeed = 150.0f;
 }
@@ -45,18 +53,22 @@ void AEnemy::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 void AEnemy::SetVulnerable()
 {
-	GetWorldTimerManager().SetTimer(TimeVulnerable, this, &AEnemy::SetInVulnerable, 10.0f, false);
+	GetWorldTimerManager().SetTimer(TimeVulnerable, this, &AEnemy::SetInVulnerable, 5.0f, false);
 	if (bIsVulnerable)
 		return;
 	bIsVulnerable = true;
+	EnemyMesh->SetMaterial(1, VulnerableMaterial);
 	GetCharacterMovement()->MaxWalkSpeed = 50.0f;
+	UE_LOG(LogTemp, Warning, TEXT("bIsVulnerable is %d"), bIsVulnerable);
 }
 
 void AEnemy::SetInVulnerable()
 {
 	GetWorldTimerManager().ClearTimer(TimeVulnerable);
 	bIsVulnerable = false;
+	EnemyMesh->SetMaterial(1, DefaultMaterial);
 	GetCharacterMovement()->MaxWalkSpeed = 150.0f;
+	UE_LOG(LogTemp, Warning, TEXT("bIsVulnerable is %d"), bIsVulnerable);
 }
 
 void AEnemy::SetMove(bool bMoveIt)
