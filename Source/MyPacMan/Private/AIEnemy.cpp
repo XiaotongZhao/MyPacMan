@@ -26,7 +26,7 @@ void AAIEnemy::SearchNewPoint()
 
 	if (NavMesh)
 	{
-		const float SearchRadius = 10000.0f;
+		const float SearchRadius = 15000.0f;
 		FNavLocation RandomPt;
 		const bool bFound = NavMesh->GetRandomReachablePointInRadius(Bot->GetActorLocation(), SearchRadius, RandomPt);
 

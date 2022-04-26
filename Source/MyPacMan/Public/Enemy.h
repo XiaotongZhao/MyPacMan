@@ -51,4 +51,7 @@ private:
 	USkeletalMeshComponent* EnemyMesh;
 	FTimerHandle TimeVulnerable;
 	int32 index;
+	float maxSpeed = 300.0f;
+	float vulnerableSpeed = 100.0f;
+	float killedSpeed = 400.0f;
 };

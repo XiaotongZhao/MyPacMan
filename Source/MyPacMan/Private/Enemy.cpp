@@ -34,7 +34,7 @@ void AEnemy::BeginPlay()
 	Super::BeginPlay();
 	DefaultMaterial = EnemyMesh->GetMaterial(1);
 	GetCapsuleComponent()->OnComponentBeginOverlap.AddDynamic(this, &AEnemy::OnCollision);
-	GetCharacterMovement()->MaxWalkSpeed = 150.0f;
+	GetCharacterMovement()->MaxWalkSpeed = maxSpeed;
 }
 
 // Called every frame
@@ -58,7 +58,7 @@ void AEnemy::SetVulnerable()
 		return;
 	bIsVulnerable = true;
 	EnemyMesh->SetMaterial(1, VulnerableMaterial);
-	GetCharacterMovement()->MaxWalkSpeed = 50.0f;
+	GetCharacterMovement()->MaxWalkSpeed = vulnerableSpeed;
 	UE_LOG(LogTemp, Warning, TEXT("bIsVulnerable is %d"), bIsVulnerable);
 }
 
@@ -67,7 +67,7 @@ void AEnemy::SetInVulnerable()
 	GetWorldTimerManager().ClearTimer(TimeVulnerable);
 	bIsVulnerable = false;
 	EnemyMesh->SetMaterial(1, DefaultMaterial);
-	GetCharacterMovement()->MaxWalkSpeed = 150.0f;
+	GetCharacterMovement()->MaxWalkSpeed = maxSpeed;
 	UE_LOG(LogTemp, Warning, TEXT("bIsVulnerable is %d"), bIsVulnerable);
 }
 
@@ -86,7 +86,7 @@ void AEnemy::Killed()
 	if (bIsDead)
 		return;
 	bIsDead = true;
-	GetCharacterMovement()->MaxWalkSpeed = 300.0f;
+	GetCharacterMovement()->MaxWalkSpeed = killedSpeed;
 	AAIEnemy* AI = Cast<AAIEnemy>(GetController());
 	AI->GoHome();
 }
@@ -94,7 +94,7 @@ void AEnemy::Killed()
 void AEnemy::ReArm()
 {
 	bIsDead = false;
-	GetCharacterMovement()->MaxWalkSpeed = 150.0f;
+	GetCharacterMovement()->MaxWalkSpeed = maxSpeed;
 	if (bIsVulnerable)
 		SetInVulnerable();
 	SetMove(true);
