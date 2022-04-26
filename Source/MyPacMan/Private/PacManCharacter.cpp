@@ -5,6 +5,7 @@
 #include "Collectables.h"
 #include "Kismet/GameplayStatics.h"
 #include "Components/CapsuleComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "EngineUtils.h"
 
 // Sets default values
@@ -12,7 +13,8 @@ APacManCharacter::APacManCharacter()
 {
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
+	GetCharacterMovement()->JumpZVelocity = 400.f;
+	GetCharacterMovement()->AirControl = 0.2f;
 }
 
 // Called when the game starts or when spawned
@@ -48,6 +50,8 @@ void APacManCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	PlayerInputComponent->BindAction("NewGame", IE_Pressed, this, &APacManCharacter::NewGame);
 	PlayerInputComponent->BindAction("ReStart", IE_Pressed, this, &APacManCharacter::ReStart);
 	PlayerInputComponent->BindAction("Pause", IE_Pressed, this, &APacManCharacter::Pause);
+	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &APacManCharacter::Jump);
+	PlayerInputComponent->BindAction("Jump", IE_Released, this, &APacManCharacter::StopJumping);
 }
 
 void APacManCharacter::MoveXAxis(float AxisValue)
